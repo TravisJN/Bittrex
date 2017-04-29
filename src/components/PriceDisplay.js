@@ -9,20 +9,8 @@ export class PriceDisplay extends React.Component{
 
         this.state = {
             price: 0,
-
-            queryParams: {
-                apikey: '',//KEYS.apiKey,
-                nonce: this.getNonce()
-            },
-
-            headers: {
-                apisign: this.getAPISign()
-            },
-
             onSubmit: this.onSubmit.bind(this)
         }
-
-        this.fetchPrice();
     }
 
     render() {
@@ -36,45 +24,26 @@ export class PriceDisplay extends React.Component{
 
     onSubmit(event) {
         var tickerSymbol = event.target.value;
-        this.fetchPrice();
+        this.fetchPrice().then((value) => {
+            this.setState({price: value.result[0].BaseCurrency});
+            console.log(value);
+        })
     }
-
-    getAPISign() {
-
-    }
-
-    getAPIKey() {
-        return '';
-    }
-
-	getNonce() {
-		return Math.floor(new Date().getTime());
-	};
 
     fetchPrice() {
-        const baseUrl = 'https://bittrex.com/api/v1.1',
-            endPoint = '/public/getmarkets',
-            url = baseUrl + endPoint + '?apikey=' + this.getAPIKey() + '&nonce=' + this.getNonce();
-
-        // perform business logic to fetch price
-        fetch(url, {  
-            //asdf
+         return fetch('http://localhost:8080', {  
             method: 'GET',
-            mode: 'no-cors',
             headers: {
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Request-Method': 'GET',
             }
         })
         .then((response) => {
-            // console.log(response);
-            // this.setState({markets: response});
-            return response;
+             return response.json();
         })
         .catch((error) => {
-            console.log(error);
+            console.log('error', error);
             this.setState({price: 'ERROR'});
         });
-        // pass data to PriceModel
     }
 }
 
