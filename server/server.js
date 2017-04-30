@@ -16,14 +16,17 @@ var getNonce = function() {
 };
 
 var baseUrl = 'https://bittrex.com/api/v1.1',
-    endPoint = '/public/getmarkets',
-    url = baseUrl + endPoint + '?apikey=' + getAPIKey() + '&nonce=' + getNonce();
+    //endPoint = '/public/getmarkets',
+    queryParams = '?apikey=' + getAPIKey() + '&nonce=' + getNonce(),
+    url;
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-next();
+    console.log(req.path);
+    url = baseUrl + req.path;
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
 app.use('/', function (req, res) {

@@ -4,6 +4,38 @@ import TextInputForm from './TextInputForm.js';
 //import KEYS from '../private/Keys.js'
 
 export class PriceDisplay extends React.Component{
+    endPoints = {
+        getMarkets: {
+            path: '/public/getmarkets'            
+        },
+        getCurrencies: {
+            path: '/public/getcurrencies'
+        },
+        getTicker: {
+            path: '/public/getticker',
+            queryParams: {
+                market: '' // (required) a string literal for the market (ex: BTC-LTC)
+            }
+        },
+        getMarketSummaries: {
+            path: '/public/getmarketsummaries'
+        },
+        getMarketSummary: {
+            path: '/public/getmarketsummary',
+            queryParams: {
+                market: '' // (required) a string literal for the market (ex: BTC-LTC)
+            }
+        },
+        getOrderBook: {
+            path: '/public/getorderbook',
+            queryParams: {
+                market: '', // (required) a string literal for the market (ex: BTC-LTC)
+                type: '',   // (required) buy, sell or both to identify the type of orderbook to return
+                depth: ''   // (optional) defaults to 20 - how deep of an order book to retrieve. Max is 50
+            }
+        }
+    }
+
     constructor(props) {
         super(props);
 
@@ -31,7 +63,8 @@ export class PriceDisplay extends React.Component{
     }
 
     fetchPrice() {
-         return fetch('http://localhost:8080', {  
+        var path = '/public/getmarkets';
+         return fetch('http://localhost:8080' + path, {  
             method: 'GET',
             headers: {
                 'Access-Control-Request-Method': 'GET',
