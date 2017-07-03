@@ -6,7 +6,7 @@ import TextInputForm from './TextInputForm.js';
 export class PriceDisplay extends React.Component{
     endPoints = {
         getMarkets: {
-            path: '/public/getmarkets'            
+            path: '/public/getmarkets'
         },
         getCurrencies: {
             path: '/public/getcurrencies'
@@ -56,6 +56,7 @@ export class PriceDisplay extends React.Component{
 
     onSubmit(event) {
         var tickerSymbol = event.target.value;
+        // dispatch an action here
         this.fetchPrice().then((value) => {
             this.setState({price: value.result[0].BaseCurrency});
             console.log(value);
@@ -63,8 +64,11 @@ export class PriceDisplay extends React.Component{
     }
 
     fetchPrice() {
-        var path = '/public/getmarkets';
-         return fetch('http://localhost:8080' + path, {  
+        //var path = '/public/getmarkets';
+        var path = '/account/getbalances',
+            qp = '?apikey=',
+            url = ['http://localhost:8080', path, qp].join('');
+         return fetch(url, {  
             method: 'GET',
             headers: {
                 'Access-Control-Request-Method': 'GET',

@@ -2,9 +2,16 @@
 var express = require('express');
 var fetch = require('node-fetch');
 var app = express();
+var sha512 = require('sha512')
 
-var getAPISign = function() {
 
+var getAPISign = function(aUrl) {
+    var secret = '';
+    var hasher = sha512.hmac(secret);
+    //can also call 'update(message)' and then 'finalize()'
+    var final = hasher.finalize(aUrl);
+    console.log(final);
+    return final.toString('hex');
 }
 
 var getAPIKey = function() {
@@ -22,7 +29,7 @@ var baseUrl = 'https://bittrex.com/api/v1.1',
 
 app.use(function(req, res, next) {
     console.log(req.path);
-    url = baseUrl + req.path;
+    url = baseUrl + req.path + queryParams;
     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -31,7 +38,11 @@ app.use(function(req, res, next) {
 
 app.use('/', function (req, res) {
     console.log('getting')
-    fetch(url)
+    fetch(url, {
+        headers: {
+            'apisign': getAPISign(url)
+        }
+    })
     .then(function(response) {
         return response.json();
     }).then(function(body) {
