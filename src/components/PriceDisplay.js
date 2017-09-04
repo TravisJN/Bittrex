@@ -40,16 +40,20 @@ export class PriceDisplay extends React.Component{
         super(props);
 
         this.state = {
+            balances: [],
             price: 0,
             onSubmit: this.onSubmit.bind(this)
         }
     }
 
     render() {
+        var balances = this.state.balances.map((aCurrency) => {
+            return <li>{aCurrency.Currency} : {aCurrency.Balance}</li>
+        })
         return( 
         <div>
             <TextInputForm onSubmit={this.state.onSubmit}/>
-            <p>ETH: {this.state.price}</p> 
+            <ul>{balances}</ul>
         </div>
         )
     }
@@ -58,7 +62,7 @@ export class PriceDisplay extends React.Component{
         var tickerSymbol = event.target.value;
         // dispatch an action here
         this.fetchPrice().then((value) => {
-            this.setState({price: value.result[0].BaseCurrency});
+            this.setState({balances: value.result});
             console.log(value);
         })
     }
@@ -66,7 +70,7 @@ export class PriceDisplay extends React.Component{
     fetchPrice() {
         //var path = '/public/getmarkets';
         var path = '/account/getbalances',
-            qp = '?apikey=',
+            qp = '?apikey=4973ea1118f14c5eb9699bc4cf5f1c3a',
             url = ['http://localhost:8080', path, qp].join('');
          return fetch(url, {  
             method: 'GET',

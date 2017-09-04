@@ -2,11 +2,12 @@
 var express = require('express');
 var fetch = require('node-fetch');
 var app = express();
-var sha512 = require('sha512')
+var sha512 = require('sha512');
+var apiKey = require('../private/Keys.js');
 
 
 var getAPISign = function(aUrl) {
-    var secret = '';
+    var secret = apiKey.secret;
     var hasher = sha512.hmac(secret);
     //can also call 'update(message)' and then 'finalize()'
     var final = hasher.finalize(aUrl);
@@ -15,7 +16,7 @@ var getAPISign = function(aUrl) {
 }
 
 var getAPIKey = function() {
-    return '';
+    return apiKey.apiKey;
 }
 
 var getNonce = function() {
@@ -23,7 +24,6 @@ var getNonce = function() {
 };
 
 var baseUrl = 'https://bittrex.com/api/v1.1',
-    //endPoint = '/public/getmarkets',
     queryParams = '?apikey=' + getAPIKey() + '&nonce=' + getNonce(),
     url;
 
@@ -37,7 +37,6 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', function (req, res) {
-    console.log('getting')
     fetch(url, {
         headers: {
             'apisign': getAPISign(url)
@@ -51,9 +50,9 @@ app.use('/', function (req, res) {
 });
 
 var server = app.listen(8080, function () {
-   var host = server.address().address
-   var port = server.address().port
+   var host = server.address().address;
+   var port = server.address().port;
    
-   console.log("Example app listening at ", host, port)
+   console.log("Bittrex proxy listening at ", host, port);
 });
 

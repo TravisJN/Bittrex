@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.js';
 import PriceDisplay from './components/PriceDisplay.js'
 import PriceTable from './components/PriceTable.js'
