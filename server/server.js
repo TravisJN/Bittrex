@@ -11,7 +11,7 @@ var getAPISign = function(aUrl) {
     var hasher = sha512.hmac(secret);
     //can also call 'update(message)' and then 'finalize()'
     var final = hasher.finalize(aUrl);
-    console.log(final);
+    //console.log(final);
     return final.toString('hex');
 }
 
@@ -24,12 +24,15 @@ var getNonce = function() {
 };
 
 var baseUrl = 'https://bittrex.com/api/v1.1',
-    queryParams = '?apikey=' + getAPIKey() + '&nonce=' + getNonce(),
+    queryParams = 'apikey=' + getAPIKey() + '&nonce=' + getNonce(),
     url;
 
 app.use(function(req, res, next) {
     console.log(req.path);
-    url = baseUrl + req.path + queryParams;
+    url = baseUrl + req.originalUrl + queryParams;
+
+    console.log(url);
+
     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

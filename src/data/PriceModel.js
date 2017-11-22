@@ -3,7 +3,11 @@ var _ = require('underscore');
 export class PriceModel {
     
     baseUrl = 'http://localhost:8080';
-    mData = {};
+    mData = {
+        balances: [],
+        getBTCPrice: 0
+    };
+    BTCPrice = 0;
 
     endPointMap = {
         getMarkets: {
@@ -35,8 +39,14 @@ export class PriceModel {
                 depth: ''   // (optional) defaults to 20 - how deep of an order book to retrieve. Max is 50
             }
         },
-        getBalances: {
+        balances: {
             path: '/account/getbalances'
+        },
+        BTCPrice: {
+            path: '/public/getmarketsummary',
+            queryParams: {
+                market: 'usdt-btc'
+            }
         }
     }
 
@@ -44,18 +54,32 @@ export class PriceModel {
         return this.mData;
     }
 
+    get balances() {
+        return this.mData.balances;
+    }
+
+    get currentBTCPrice() {
+        return this.mData.BTCPrice && this.mData.BTCPrice.length && this.mData.BTCPrice[0];
+    }
+
+    parseData(aData, aEndPointKey) {
+        var body = aData.result;
+
+        this.mData[aEndPointKey] = body;
+    }
+
     buildQueryString(aEndPoint) {
         var urlString = this.baseUrl + aEndPoint.path + '?';
 
         // Could be imrpoved with functional iterator
         for (var key in aEndPoint.queryParams) {
-            urlString += key + '=' + aEndPoint[key] + '&';
+            urlString += key + '=' + aEndPoint.queryParams[key] + '&';
         }
 
         return urlString;
     }
 
-    fetchData(aEndPoint, aQueryParams) {
+    fetchData(aEndPoint, aQueryParams = {}) {
         let endPoint = this.endPointMap[aEndPoint],
             fullUrl;
 
@@ -65,14 +89,18 @@ export class PriceModel {
                 queryParams: _.defaults(aQueryParams, endPoint.queryParams)
             }
 
-            return this.makeRequest(this.buildQueryString(fullUrl))
+            return this.makeRequest(this.buildQueryString(fullUrl), aEndPoint);
         }
-
-
     }
     
-    makeRequest(aUrl) {
-
+    /**
+     * @description This function makes the actual GET request with whatever url string is passed
+     *              in, then it sets the response data to mData and returns the promise 
+     * @param {string} aUrl The fully built url string
+     * @param {string} aEndPoint The endpoint key used for mapping the response data correctly
+     */
+    // TODO: handle the setting of data better so it's not overwritten on every request
+    makeRequest(aUrl, aEndPoint) {
         return fetch(aUrl, {  
             method: 'GET',
             headers: {
@@ -80,7 +108,11 @@ export class PriceModel {
             }
         })
         .then((response) => {
-            return this.mData = response.json();  // Note: intentional assignment
+            // Don't edit this first then statement or it will fuck everything up
+            return response.json();
+        }).then((responseJson) => {
+            return this.parseData(responseJson, aEndPoint);
+            console.log(responseJson);
         })
         .catch((error) => {
             console.log('error', error);

@@ -3,3 +3,25 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+th, td {
+  padding: 20px;
+}
+
+table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 1px solid blue;
+}
+
+tbody td {
+  text-align: right;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #d5ebf3;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #ceddff;
+}
