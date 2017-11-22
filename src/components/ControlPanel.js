@@ -1,4 +1,5 @@
 import React from 'react';
+import { setInterval } from 'timers';
 
 export class ControlPanel extends React.Component {
     buttons = [

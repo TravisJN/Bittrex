@@ -7,16 +7,8 @@ export class PriceDisplay extends React.Component{
     constructor(props) {
         super(props);
 
-        // this.state = {
-        //     balances: [],
-        //     price: 0,
-        //     onSubmit: this.onSubmit.bind(this)
-        // }
-
         this.mModel = props.model;
     }
-
-
 
     getRows() {
         return this.props.balances
@@ -24,10 +16,14 @@ export class PriceDisplay extends React.Component{
                     return aCurrency.Balance > 0;
                 })
                 .map((aCurrency) => {
+                    let symbol = aCurrency.Currency,
+                        balance = aCurrency.Balance.toFixed(4);
                     return (
                         <tr key={aCurrency.Currency}>
                             <td>{aCurrency.Currency}</td>
-                            <td>{aCurrency.Balance}</td>
+                            <td>{balance}</td>
+                            <td>{this.mModel.getBTCValue(aCurrency.Currency)}</td>
+                            <td>{this.mModel.getDollarValue(aCurrency.Currency)}</td>
                         </tr>
                     )
                 });
@@ -41,6 +37,8 @@ export class PriceDisplay extends React.Component{
                         <tr>
                             <th>Currency</th>
                             <th>Balance</th>
+                            <th>BTC Value</th>
+                            <th>Dollar Value</th>
                         </tr>
                     </thead>
                     <tbody>

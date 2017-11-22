@@ -5,7 +5,10 @@ export class PriceModel {
     baseUrl = 'http://localhost:8080';
     mData = {
         balances: [],
-        getBTCPrice: 0
+        getBTCPrice: [{
+            Last: 0
+        }],
+        marketSummaries: []
     };
     BTCPrice = 0;
 
@@ -22,7 +25,7 @@ export class PriceModel {
                 market: '' // (required) a string literal for the market (ex: BTC-LTC)
             }
         },
-        getMarketSummaries: {
+        marketSummaries: {
             path: '/public/getmarketsummaries'
         },
         getMarketSummary: {
@@ -50,6 +53,11 @@ export class PriceModel {
         }
     }
 
+    constructor() {
+        // initialize with the fetch for all markets
+        this.fetchData('marketSummaries');
+    }
+
     get data() {
         return this.mData;
     }
@@ -62,10 +70,49 @@ export class PriceModel {
         return this.mData.BTCPrice && this.mData.BTCPrice.length && this.mData.BTCPrice[0];
     }
 
-    parseData(aData, aEndPointKey) {
-        var body = aData.result;
+    getLastPrice(aSymbol) {
+        // Traverse the marketsummary data to find a match
+        var marketObject = this.mData.marketSummaries.find((aMarket) => {
+            return aMarket.MarketName.indexOf(aSymbol) > -1;
+        });
 
-        this.mData[aEndPointKey] = body;
+        if(marketObject) {
+            return marketObject.Last;
+        }
+    }
+
+    getBTCValue(aSymbol) {
+        var currentBalance,
+            lastPrice = this.getLastPrice(aSymbol);
+        
+            
+            currentBalance = this.mData.balances.find((aBalance) => {
+                return aBalance.Currency === aSymbol;
+            });
+            
+            if (aSymbol === 'BTC') {
+                return currentBalance.Balance;
+            }
+
+        return (currentBalance.Balance * lastPrice).toFixed(8);
+    }
+
+    getDollarValue(aSymbol) {
+        var currencyBTCValue = this.getBTCValue(aSymbol);
+
+        return (currencyBTCValue * this.currentBTCPrice.Last).toFixed(2);
+    }
+
+    parseData(aData, aEndPointKey) {
+        var body = aData.result,
+            parsedData;
+
+        switch(aEndPointKey) {
+            default:
+                parsedData = body;
+                break;
+        }
+        this.mData[aEndPointKey] = parsedData;
     }
 
     buildQueryString(aEndPoint) {
