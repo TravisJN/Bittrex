@@ -16,15 +16,25 @@ export class TextInputForm extends React.Component{
         return (
             <div className="Text-Input-Form">
                 <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Ticker Symbol:
-                        <input type="text" value={this.state.value} onChange={this.handleChange} />
-                    </label>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Get Balances" />
                 </form>
             </div>
         )
     }
+
+    // render() {
+    //     return (
+    //         <div className="Text-Input-Form">
+    //             <form onSubmit={this.handleSubmit}>
+    //                 <label>
+    //                     Ticker Symbol:
+    //                     <input type="text" value={this.state.value} onChange={this.handleChange} />
+    //                 </label>
+    //                 <input type="submit" value="Submit" />
+    //             </form>
+    //         </div>
+    //     )
+    // }
 
     handleChange(event) {
         this.setState({value: event.target.value});

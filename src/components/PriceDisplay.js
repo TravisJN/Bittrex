@@ -1,8 +1,7 @@
 import React from 'react';
 import '../App.js';
 import TextInputForm from './TextInputForm.js';
-import PriceModel from '../data/PriceModel.js';
-//import KEYS from '../private/Keys.js'
+//import PriceModel from '../data/PriceModel.js';
 
 export class PriceDisplay extends React.Component{
 
@@ -15,7 +14,7 @@ export class PriceDisplay extends React.Component{
             onSubmit: this.onSubmit.bind(this)
         }
 
-        this.mModel = new PriceModel();
+        this.mModel = props.model;
     }
 
     render() {
@@ -36,11 +35,11 @@ export class PriceDisplay extends React.Component{
     }
 
     onSubmit(event) {
-        var tickerSymbol = event.target.value;
+        //var tickerSymbol = event.target.value,
+        var endPoint = 'getBalances';
 
-        this.mModel.fetchPrice().then((value) => {
+        this.mModel.fetchData(endPoint).then((value) => {
             this.setState({balances: value.result});
-            console.log(value.result);
         })
     }
 }

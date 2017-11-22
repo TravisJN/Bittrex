@@ -1,10 +1,11 @@
+var _ = require('underscore');
+
 export class PriceModel {
+    
+    baseUrl = 'http://localhost:8080';
+    mData = {};
 
-    constructor() {
-
-    }
-
-    endPoints = {
+    endPointMap = {
         getMarkets: {
             path: '/public/getmarkets'
         },
@@ -33,20 +34,53 @@ export class PriceModel {
                 type: '',   // (required) buy, sell or both to identify the type of orderbook to return
                 depth: ''   // (optional) defaults to 20 - how deep of an order book to retrieve. Max is 50
             }
+        },
+        getBalances: {
+            path: '/account/getbalances'
         }
     }
 
-    fetchPrice() {
-        var path = '/account/getbalances',
-        url = ['http://localhost:8080', path].join('');
-        return fetch(url, {  
+    get data() {
+        return this.mData;
+    }
+
+    buildQueryString(aEndPoint) {
+        var urlString = this.baseUrl + aEndPoint.path + '?';
+
+        // Could be imrpoved with functional iterator
+        for (var key in aEndPoint.queryParams) {
+            urlString += key + '=' + aEndPoint[key] + '&';
+        }
+
+        return urlString;
+    }
+
+    fetchData(aEndPoint, aQueryParams) {
+        let endPoint = this.endPointMap[aEndPoint],
+            fullUrl;
+
+        if (endPoint) {
+            fullUrl = {
+                path: endPoint.path,
+                queryParams: _.defaults(aQueryParams, endPoint.queryParams)
+            }
+
+            return this.makeRequest(this.buildQueryString(fullUrl))
+        }
+
+
+    }
+    
+    makeRequest(aUrl) {
+
+        return fetch(aUrl, {  
             method: 'GET',
             headers: {
                 'Access-Control-Request-Method': 'GET',
             }
         })
         .then((response) => {
-            return response.json();
+            return this.mData = response.json();  // Note: intentional assignment
         })
         .catch((error) => {
             console.log('error', error);

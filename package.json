@@ -12,7 +12,8 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
-    "sha512": "0.0.1"
+    "sha512": "0.0.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
