@@ -67,7 +67,7 @@ export class PriceModel {
     }
 
     get currentBTCPrice() {
-        return this.mData.BTCPrice && this.mData.BTCPrice.length && this.mData.BTCPrice[0];
+        return this.mData.BTCPrice && this.mData.BTCPrice.length && this.mData.BTCPrice[0] && this.mData.BTCPrice[0].Last.toFixed(2);
     }
 
     get dollarSum() {
@@ -111,7 +111,7 @@ export class PriceModel {
     getDollarValue(aSymbol) {
         var currencyBTCValue = this.getBTCValue(aSymbol);
 
-        return (currencyBTCValue * this.currentBTCPrice.Last).toFixed(2);
+        return (currencyBTCValue * this.currentBTCPrice).toFixed(2);
     }
 
     parseData(aData, aEndPointKey) {

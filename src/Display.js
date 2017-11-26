@@ -22,7 +22,7 @@ export class Display extends React.Component{
     componentDidMount() {
         // Initialize the view with the data
         this.mPriceModel.fetchData('BTCPrice').then((responseData) => {
-            this.setState({currentBTCPrice: this.mPriceModel.currentBTCPrice.Last});
+            this.setState({currentBTCPrice: this.mPriceModel.currentBTCPrice});
             this.mPriceModel.fetchData('balances').then((responseData) => {
                 this.setState({balances: this.mPriceModel.balances});            
             });
@@ -36,7 +36,7 @@ export class Display extends React.Component{
 
         this.mPriceModel.fetchData(aButton.endPointKey).then((responseData) => {
             this.setState({balances: this.mPriceModel.balances});
-            this.setState({currentBTCPrice: this.mPriceModel.currentBTCPrice.Last});
+            this.setState({currentBTCPrice: this.mPriceModel.currentBTCPrice});
             this.setState({btcLoadingAnimation: false})
         });
     }
