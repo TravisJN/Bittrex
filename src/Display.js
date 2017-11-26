@@ -17,34 +17,40 @@ export class Display extends React.Component{
         }
 
         this.mPriceModel = new PriceModel();
-
     }
     
-
-  buttonClicked(event, aButton) {
-    console.log(aButton.label + ' button clicked');
-
-    if(aButton.endPointKey === 'BTCPrice') {
-        this.setState({btcLoadingAnimation: true})
+    componentDidMount() {
+        // Initialize the view with the data
+        this.mPriceModel.fetchData('BTCPrice').then((responseData) => {
+            this.setState({currentBTCPrice: this.mPriceModel.currentBTCPrice.Last});
+            this.mPriceModel.fetchData('balances').then((responseData) => {
+                this.setState({balances: this.mPriceModel.balances});            
+            });
+        });
     }
 
-    this.mPriceModel.fetchData(aButton.endPointKey).then((responseData) => {
-        this.setState({balances: this.mPriceModel.balances});
-        this.setState({currentBTCPrice: this.mPriceModel.currentBTCPrice.Last});
-        this.setState({btcLoadingAnimation: false})
-    });
-  }
+    buttonClicked(event, aButton) {
+        if(aButton.endPointKey === 'BTCPrice') {
+            this.setState({btcLoadingAnimation: true})
+        }
 
-  render() {
-    return( 
-      <div>
-        <ControlPanel buttonClicked={this.buttonClicked.bind(this)}/>
-        <CurrentBTCPriceDisplay loadingAnimation={this.state.btcLoadingAnimation} price={this.state.currentBTCPrice}/>
-        <PriceDisplay model={this.mPriceModel} balances={this.state.balances}/>
-        <PriceTable />
-      </div>
-    )
-  }
+        this.mPriceModel.fetchData(aButton.endPointKey).then((responseData) => {
+            this.setState({balances: this.mPriceModel.balances});
+            this.setState({currentBTCPrice: this.mPriceModel.currentBTCPrice.Last});
+            this.setState({btcLoadingAnimation: false})
+        });
+    }
+
+    render() {
+        return( 
+        <div>
+            <ControlPanel buttonClicked={this.buttonClicked.bind(this)}/>
+            <CurrentBTCPriceDisplay loadingAnimation={this.state.btcLoadingAnimation} price={this.state.currentBTCPrice}/>
+            <PriceDisplay model={this.mPriceModel} balances={this.state.balances}/>
+            <PriceTable />
+        </div>
+        )
+    }
 }
 
 export default Display;

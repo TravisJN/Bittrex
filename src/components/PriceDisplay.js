@@ -1,6 +1,5 @@
 import React from 'react';
 import '../App.js';
-import TextInputForm from './TextInputForm.js';
 
 export class PriceDisplay extends React.Component{
 
@@ -10,14 +9,11 @@ export class PriceDisplay extends React.Component{
         this.mModel = props.model;
     }
 
-    getRows() {
-        return this.props.balances
-                .filter((aCurrency) => {
-                    return aCurrency.Balance > 0;
-                })
-                .map((aCurrency) => {
+    getBalanceRows() {
+        return this.props.balances.map((aCurrency) => {
                     let symbol = aCurrency.Currency,
                         balance = aCurrency.Balance.toFixed(4);
+
                     return (
                         <tr key={aCurrency.Currency}>
                             <td>{aCurrency.Currency}</td>
@@ -27,6 +23,17 @@ export class PriceDisplay extends React.Component{
                         </tr>
                     )
                 });
+    }
+
+    getSumRow() {
+        return (
+            <tr className="tr-sum">
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td>{this.mModel.dollarSum}</td>
+            </tr>
+        )
     }
 
     render() {
@@ -42,40 +49,13 @@ export class PriceDisplay extends React.Component{
                         </tr>
                     </thead>
                     <tbody>
-                        {this.getRows()}
+                        {this.getBalanceRows()}
+                        {this.getSumRow()}
                     </tbody>
                 </table>
             </div>
         )
     }
-
-    // render() {
-    //     return( 
-    //         <div>
-    //             <TextInputForm onSubmit={this.state.onSubmit}/>
-    //             <table>
-    //                 <thead>
-    //                     <tr>
-    //                         <th>Currency</th>
-    //                         <th>Balance</th>
-    //                     </tr>
-    //                 </thead>
-    //                 <tbody>
-    //                     {this.getRows()}
-    //                 </tbody>
-    //             </table>
-    //         </div>
-    //     )
-    // }
-    
-
-    // onSubmit(event) {
-    //     var endPoint = 'getBalances';
-
-    //     this.mModel.fetchData(endPoint).then((value) => {
-    //         this.setState({balances: value.result});
-    //     })
-    // }
 }
 
 export default PriceDisplay;

@@ -70,6 +70,17 @@ export class PriceModel {
         return this.mData.BTCPrice && this.mData.BTCPrice.length && this.mData.BTCPrice[0];
     }
 
+    get dollarSum() {
+        let sum = 0;
+
+        if (this.mData.balances && this.mData.balances.length) {
+            // sum up the total balance
+            return this.mData.balances.reduce((aSum, aCurrency) => {
+                return Number(aSum) + Number(this.getDollarValue(aCurrency.Currency));
+            }, sum).toFixed(2);
+        }
+    }
+
     getLastPrice(aSymbol) {
         // Traverse the marketsummary data to find a match
         var marketObject = this.mData.marketSummaries.find((aMarket) => {
@@ -108,10 +119,16 @@ export class PriceModel {
             parsedData;
 
         switch(aEndPointKey) {
+            case 'balances':
+                parsedData = body.filter((aCurrency) => {
+                    return aCurrency.Balance > 0;
+                });
+                break;
             default:
                 parsedData = body;
                 break;
         }
+
         this.mData[aEndPointKey] = parsedData;
     }
 
@@ -146,7 +163,6 @@ export class PriceModel {
      * @param {string} aUrl The fully built url string
      * @param {string} aEndPoint The endpoint key used for mapping the response data correctly
      */
-    // TODO: handle the setting of data better so it's not overwritten on every request
     makeRequest(aUrl, aEndPoint) {
         return fetch(aUrl, {  
             method: 'GET',
@@ -159,11 +175,9 @@ export class PriceModel {
             return response.json();
         }).then((responseJson) => {
             return this.parseData(responseJson, aEndPoint);
-            console.log(responseJson);
         })
         .catch((error) => {
-            console.log('error', error);
-            this.setState({price: 'ERROR'});
+            console.log(aEndPoint + ' fetch error: ', error);
         });
     }
 }
