@@ -1,5 +1,6 @@
 var _ = require('underscore');
 
+// Simple data store and API request handler
 export class PriceModel {
     
     baseUrl = 'http://localhost:8080';

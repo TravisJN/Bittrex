@@ -4,7 +4,7 @@ This app connects to the Bittrex API and displays the current balances of the us
 
 I intend to add the ability to Buy and Sell currencies with advanced trading strategies such as trailing stops or other algorithm driven actions.
 
-#### How to Use
+### How to Use
 1. Clone this github repo into a local directory
 2. You'll need to add a new folder in the root directory called `private` and add a new file `Keys.js` that contains the following code:
 ```
@@ -21,7 +21,7 @@ Note: the `private` folder is in `.gitignore` and will not be tracked by git
 
 5. In another terminal window, from this project's root directory, run `npm start`. This should automatically open your browser and load the application. Enjoy!
 
-#### Made with React
+### Made with React
 
 This project is open source and made with React. This is my first real React application and is mostly a learning opportunity for me to learn the React framework.
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.js';
 import PriceDisplay from './components/PriceDisplay.js';
-import PriceTable from './components/PriceTable.js';
 import PriceModel from './data/PriceModel';
 import { ControlPanel } from './components/ControlPanel';
 import CurrentBTCPriceDisplay from './components/CurrentBTCPriceDisplay';
@@ -47,7 +46,6 @@ export class Display extends React.Component{
             <ControlPanel buttonClicked={this.buttonClicked.bind(this)}/>
             <CurrentBTCPriceDisplay loadingAnimation={this.state.btcLoadingAnimation} price={this.state.currentBTCPrice}/>
             <PriceDisplay model={this.mPriceModel} balances={this.state.balances}/>
-            <PriceTable />
         </div>
         )
     }

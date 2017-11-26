@@ -1,7 +1,12 @@
 import React from 'react';
-import { setInterval } from 'timers';
 
+/**
+ * @description This component builds a group of buttons to be displayed at the top of the application
+ */
 export class ControlPanel extends React.Component {
+    // This array is used to build the group of buttons
+    // label: The string displayed on the button element
+    // endPointKey: the key to be used with the endPointKey map in PriceModel
     buttons = [
         {
             label: 'Get Balances',
@@ -12,10 +17,6 @@ export class ControlPanel extends React.Component {
             endPointKey: 'BTCPrice'
         }
     ]
-
-    constructor(props) {
-        super(props);
-    }
 
     getButtons() {
         return this.buttons.map((aButton) => {

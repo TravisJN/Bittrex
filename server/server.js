@@ -11,7 +11,6 @@ var getAPISign = function(aUrl) {
     var hasher = sha512.hmac(secret);
     //can also call 'update(message)' and then 'finalize()'
     var final = hasher.finalize(aUrl);
-    //console.log(final);
     return final.toString('hex');
 }
 
