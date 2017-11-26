@@ -8,10 +8,6 @@
     "node-fetch": "^1.6.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-redux": "^5.0.4",
-    "redux": "^3.6.0",
-    "redux-logger": "^3.0.1",
-    "redux-thunk": "^2.2.0",
     "sha512": "0.0.1",
     "underscore": "^1.8.3"
   },
