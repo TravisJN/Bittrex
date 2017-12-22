@@ -1,3 +1,8 @@
+NOTE: This app has been converted to a TypeScript project. Check it out here: https://github.com/TravisJN/bittrex-ts
+
+
+
+
 Bittrex Portal
 =====
 This app connects to the Bittrex API and displays the current balances of the user's wallet.
